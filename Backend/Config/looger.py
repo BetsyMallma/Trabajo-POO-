@@ -22,3 +22,7 @@ class Logger:
         print(f"\n=== HISTORIAL DEL SISTEMA ({len(self._logs)} eventos) ===")
         for log in self._logs:
             print(f"  [{log['hora']}] {log['nivel']:7} | {log['msg']}")
+
+    def limpiar(self):
+        self._logs.clear()
+        print("  OK Historial de logs limpiado")
