@@ -17,3 +17,8 @@ class Logger:
     def info(self, msg):    self._registrar("INFO",    msg)
     def warning(self, msg): self._registrar("WARNING", msg)
     def error(self, msg):   self._registrar("ERROR",   msg)
+
+    def mostrar_logs(self):
+        print(f"\n=== HISTORIAL DEL SISTEMA ({len(self._logs)} eventos) ===")
+        for log in self._logs:
+            print(f"  [{log['hora']}] {log['nivel']:7} | {log['msg']}")
