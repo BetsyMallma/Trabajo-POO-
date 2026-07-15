@@ -8,3 +8,9 @@ class Logger:
             cls._instancia = super().__new__(cls)
             cls._instancia._logs = []
         return cls._instancia
+
+    def _registrar(self, nivel, mensaje):
+        hora = datetime.datetime.now().strftime("%H:%M:%S")
+        entrada = {"hora": hora, "nivel": nivel, "msg": mensaje}
+        self._logs.append(entrada)
+
