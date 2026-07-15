@@ -14,3 +14,6 @@ class Logger:
         entrada = {"hora": hora, "nivel": nivel, "msg": mensaje}
         self._logs.append(entrada)
 
+    def info(self, msg):    self._registrar("INFO",    msg)
+    def warning(self, msg): self._registrar("WARNING", msg)
+    def error(self, msg):   self._registrar("ERROR",   msg)
