@@ -1,11 +1,22 @@
 import enum
 
 
+# ──────────────────────────────────────────────────────────────────────────────
+# ENUMERACIONES DE TITULO
+# ──────────────────────────────────────────────────────────────────────────────
+class TipoContenido(str, enum.Enum):
+    PELICULA = "PELICULA"
+    SERIE = "SERIE"
+
+
 class EstadoVisu(str, enum.Enum):
     VISTO = "VISTO"
     PENDIENTE = "PENDIENTE"
 
 
+# ──────────────────────────────────────────────────────────────────────────────
+# MODELO — Titulo
+# ──────────────────────────────────────────────────────────────────────────────
 class Titulo:
     def __init__(self, titulo, tipo, anio, id_genero, id_director, calificacion=None):
         self.id = None
