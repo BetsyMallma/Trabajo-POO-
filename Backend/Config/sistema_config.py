@@ -10,3 +10,10 @@ class SistemaConfig:
             cls._inst.version = "1.0"
             cls._inst.empresa = "Proyecto Academico SPS"
             cls._inst.autor   = "Betsy"
+            Logger().info(
+                f"Sistema Iniciado: {cls._inst.nombre} "
+                f"Version: {cls._inst.version} "
+                f"Empresa: {cls._inst.empresa} "
+                f"Autor: {cls._inst.autor}"
+            )
+        return cls._inst
