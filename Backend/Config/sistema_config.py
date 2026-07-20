@@ -1,4 +1,4 @@
-from Backend.Config.looger import Logger
+from Backend.config.logger import Logger
 
 class SistemaConfig:
     _inst = None
