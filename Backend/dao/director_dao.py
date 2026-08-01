@@ -1,7 +1,7 @@
 #Importo con el import las rutas
 import pyodbc
-from config.logger import Logger
-from config.base_datos import obtener_conexion, ErrorOperacionBD
+from Config.logger import Logger
+from Config.base_datos import obtener_conexion, ErrorOperacionBD
 from modelos.director import Director
 
 #==========================================================================================================

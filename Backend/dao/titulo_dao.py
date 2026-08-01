@@ -1,7 +1,7 @@
 import pyodbc
 import datetime
-from config.logger import Logger
-from config.base_datos import obtener_conexion, ErrorOperacionBD
+from Config.logger import Logger
+from Config.base_datos import obtener_conexion, ErrorOperacionBD
 from modelos.titulo import Titulo
 from modelos.enums import TipoContenido, EstadoVisu
 from dao.genero_dao import GeneroNoEncontradoError
