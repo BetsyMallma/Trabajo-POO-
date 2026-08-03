@@ -1,4 +1,4 @@
-from Config.logger import Logger
+from config.logger import Logger
 
 class SistemaConfig:
     _inst = None
