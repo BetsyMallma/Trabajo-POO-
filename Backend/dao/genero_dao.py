@@ -6,14 +6,17 @@ from modelos.genero import Genero
 #===============================================
 #CREANDO MIS EXEPCIONES
 #===============================================
+# Cuando no se encuentra el género por su ID
 class GeneroNoEncontradoError(Exception):
     def __init__(self, genero_id):
         super().__init__(f"Genero ID = {genero_id} no encontrado")
 
+# Cuando intentas agregar un género que ya existe
 class GeneroDuplicadoError(Exception):
     def __init__(self, nombre):
         super().__init__(f"Genero '{nombre}' ya registrado")
-
+        
+# Cuando intentas eliminar un género que tiene títulos vinculados
 class GeneroConTitulosError(Exception):
     def __init__(self, genero_id):
         super().__init__(f"Genero ID = {genero_id} no se puede eliminar: tiene titulos asociados")
@@ -21,29 +24,32 @@ class GeneroConTitulosError(Exception):
 #===============================================
 #CREANDO CLASE GENERODAO
 #===============================================
-
+# --- Clase principal que maneja los géneros en la base de datos ---
 class GeneroDAO:
     def __init__(self):
         self.__log = Logger()
 
     def insertar(self, genero):
+        # Primero verificamos que no exista un género con el mismo nombre        
         if self.buscar_por_nombre(genero.nombre):
             self.__log.warning(f"Genero duplicado: {genero.nombre}")
             raise GeneroDuplicadoError(genero.nombre)
-
+        
+        # Abrimos conexión e insertamos el nuevo género
         conn = obtener_conexion()
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO genero (nombre, descripcion) VALUES (%s, %s) RETURNING id",
             (genero.nombre, genero.descripcion)
         )
-        genero.id = cursor.fetchone()["id"]
+        genero.id = cursor.fetchone()["id"] # Guardamos el ID que generó la BD
         conn.commit()
         conn.close()
         self.__log.info(f"Genero agregado: {genero.nombre} (ID = {genero.id})")
         return genero
 
     def buscar_por_nombre(self, nombre):
+        # Buscamos un género por su nombre exacto
         conn = obtener_conexion()
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM genero WHERE nombre = %s", (nombre,))
@@ -52,6 +58,7 @@ class GeneroDAO:
         return self.__fila_a_genero(fila) if fila else None
 
     def buscar_por_id(self, genero_id):
+        # Buscamos un género por su ID
         conn = obtener_conexion()
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM genero WHERE id = %s", (genero_id,))
@@ -60,6 +67,7 @@ class GeneroDAO:
         return self.__fila_a_genero(fila) if fila else None
 
     def obtener_todos(self):
+        # Traemos todos los géneros ordenados alfabéticamente
         conn = obtener_conexion()
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM genero ORDER BY nombre")
@@ -68,6 +76,7 @@ class GeneroDAO:
         return [self.__fila_a_genero(f) for f in filas]
 
     def eliminar(self, genero_id):
+        # Verificamos que el género exista antes de intentar eliminarlo
         g = self.buscar_por_id(genero_id)
         if not g:
             self.__log.error(f"Eliminar fallido: Genero ID = {genero_id} no existe")
@@ -88,11 +97,13 @@ class GeneroDAO:
         return True
 
     def actualizar(self, genero_id, nombre=None, descripcion=None):
+        # Verificamos que el género exista
         g = self.buscar_por_id(genero_id)
         if not g:
             self.__log.error(f"Actualizar fallido: Genero ID = {genero_id} no existe")
             raise GeneroNoEncontradoError(genero_id)
 
+        # Si no se pasa un valor nuevo, se conserva el que ya tenía
         nuevo_nombre = nombre if nombre is not None else g.nombre
         nueva_descripcion = descripcion if descripcion is not None else g.descripcion
 
@@ -110,6 +121,7 @@ class GeneroDAO:
         return g
 
     def total(self):
+        # Contamos cuántos géneros hay en la tabla
         conn = obtener_conexion()
         cursor = conn.cursor()
         cursor.execute("SELECT COUNT(*) AS total FROM genero")
@@ -118,6 +130,7 @@ class GeneroDAO:
         return total
 
     def __fila_a_genero(self, fila):
+        # Convertimos una fila de la BD en un objeto Genero
         g = Genero(fila["nombre"], fila["descripcion"])
         g.id = fila["id"]
         return g
