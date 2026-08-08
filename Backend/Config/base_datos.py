@@ -2,6 +2,10 @@ import os
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
+#Esto permite que el archivo .env se ejecute
+from dotenv import load_dotenv
+load_dotenv()
+
 #================================================
 # Creo la clase obtener_conexion
 #================================================
